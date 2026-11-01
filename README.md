@@ -7,7 +7,7 @@ A local Chrome extension that lets you boost bass, improve vocal clarity, and ad
 1. Open `chrome://extensions` in Chrome.
 2. Enable **Developer mode**.
 3. Select **Load unpacked**.
-4. Choose this project folder: `C:\Users\hunge\Downloads\Engineer\sound plugin`.
+4. Choose this project folder.
 5. Pin **Tab Sound Enhancer**, open a tab with audio, then click the extension and choose **Start processing**.
 
 Use **Stop** before switching to another tab. Chrome shows its normal capture indicator while processing is active.
