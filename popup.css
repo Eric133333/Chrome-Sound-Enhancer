@@ -67,6 +67,10 @@ button:disabled { cursor: not-allowed; opacity: .45; }
 .preset { background: #272b40; color: #d9def2; padding: 6px; }
 .preset.selected { background: #697ee8; color: white; }
 
+.output-grid { display: grid; gap: 7px; grid-template-columns: repeat(3, 1fr); }
+.output-mode { background: #272b40; color: #d9def2; padding: 6px; }
+.output-mode.selected { background: #697ee8; color: white; }
+
 .controls { display: grid; gap: 13px; margin: 20px 0; }
 
 .control span { display: flex; font-size: 13px; font-weight: 650; justify-content: space-between; }

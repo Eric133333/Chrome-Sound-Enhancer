@@ -1,8 +1,8 @@
-const DEFAULT_SETTINGS = { bass: 0, clarity: 0, volume: 100, preset: 'balanced' };
+const DEFAULT_SETTINGS = { bass: 0, clarity: 0, volume: 100, outputMode: 'both', preset: 'balanced' };
 const PRESETS = {
-  balanced: { bass: 0, clarity: 0, volume: 100, preset: 'balanced' },
-  bassBoost: { bass: 8, clarity: 0, volume: 100, preset: 'bassBoost' },
-  vocalClarity: { bass: 0, clarity: 5, volume: 100, preset: 'vocalClarity' },
+  balanced: { bass: 0, clarity: 0, volume: 100, outputMode: 'both', preset: 'balanced' },
+  bassBoost: { bass: 8, clarity: 0, volume: 100, outputMode: 'both', preset: 'bassBoost' },
+  vocalClarity: { bass: 0, clarity: 5, volume: 100, outputMode: 'both', preset: 'vocalClarity' },
 };
 
 const elements = {
@@ -15,6 +15,7 @@ const elements = {
   clarityValue: document.querySelector('#clarity-value'),
   volumeValue: document.querySelector('#volume-value'),
   presetButtons: [...document.querySelectorAll('[data-preset]')],
+  outputButtons: [...document.querySelectorAll('[data-output-mode]')],
   start: document.querySelector('#start'),
   stop: document.querySelector('#stop'),
 };
@@ -37,6 +38,9 @@ function renderSettings() {
   elements.volumeValue.value = `${settings.volume}%`;
   elements.presetButtons.forEach((button) => {
     button.classList.toggle('selected', button.dataset.preset === settings.preset);
+  });
+  elements.outputButtons.forEach((button) => {
+    button.classList.toggle('selected', button.dataset.outputMode === settings.outputMode);
   });
 }
 
@@ -71,6 +75,7 @@ function updateFromSliders() {
     bass: Number(elements.bass.value),
     clarity: Number(elements.clarity.value),
     volume: Number(elements.volume.value),
+    outputMode: settings.outputMode,
     preset: 'custom',
   };
   saveSettings().catch((error) => displayStatus(error.message, 'error'));
@@ -93,7 +98,14 @@ async function initialize() {
 
 elements.presetButtons.forEach((button) => {
   button.addEventListener('click', () => {
-    settings = { ...PRESETS[button.dataset.preset] };
+    settings = { ...PRESETS[button.dataset.preset], outputMode: settings.outputMode };
+    saveSettings().catch((error) => displayStatus(error.message, 'error'));
+  });
+});
+
+elements.outputButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    settings = { ...settings, outputMode: button.dataset.outputMode };
     saveSettings().catch((error) => displayStatus(error.message, 'error'));
   });
 });

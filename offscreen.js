@@ -1,4 +1,4 @@
-const DEFAULT_SETTINGS = { bass: 0, clarity: 0, volume: 100, preset: 'balanced' };
+const DEFAULT_SETTINGS = { bass: 0, clarity: 0, volume: 100, outputMode: 'both', preset: 'balanced' };
 
 let audioContext;
 let mediaStream;
@@ -7,6 +7,10 @@ let bassNode;
 let clarityNode;
 let gainNode;
 let limiterNode;
+let monoMixNode;
+let leftGainNode;
+let rightGainNode;
+let outputMergerNode;
 let activeTabId;
 
 function normalizeSettings(settings = {}) {
@@ -19,6 +23,7 @@ function normalizeSettings(settings = {}) {
     bass: numberInRange(settings.bass, 0, 12, DEFAULT_SETTINGS.bass),
     clarity: numberInRange(settings.clarity, 0, 12, DEFAULT_SETTINGS.clarity),
     volume: numberInRange(settings.volume, 0, 150, DEFAULT_SETTINGS.volume),
+    outputMode: ['left', 'both', 'right'].includes(settings.outputMode) ? settings.outputMode : DEFAULT_SETTINGS.outputMode,
     preset: typeof settings.preset === 'string' ? settings.preset : DEFAULT_SETTINGS.preset,
   };
 }
@@ -30,6 +35,8 @@ function applySettings(settings) {
   bassNode.gain.setTargetAtTime(normalized.bass, now, 0.015);
   clarityNode.gain.setTargetAtTime(normalized.clarity, now, 0.015);
   gainNode.gain.setTargetAtTime(normalized.volume / 100, now, 0.015);
+  leftGainNode.gain.setTargetAtTime(normalized.outputMode === 'right' ? 0 : 1, now, 0.01);
+  rightGainNode.gain.setTargetAtTime(normalized.outputMode === 'left' ? 0 : 1, now, 0.01);
 }
 
 async function stopAudio({ notify = false } = {}) {
@@ -43,7 +50,11 @@ async function stopAudio({ notify = false } = {}) {
   clarityNode?.disconnect();
   gainNode?.disconnect();
   limiterNode?.disconnect();
-  sourceNode = bassNode = clarityNode = gainNode = limiterNode = undefined;
+  monoMixNode?.disconnect();
+  leftGainNode?.disconnect();
+  rightGainNode?.disconnect();
+  outputMergerNode?.disconnect();
+  sourceNode = bassNode = clarityNode = gainNode = limiterNode = monoMixNode = leftGainNode = rightGainNode = outputMergerNode = undefined;
   stream?.getTracks().forEach((track) => track.stop());
 
   if (audioContext) {
@@ -94,7 +105,22 @@ async function startAudio({ streamId, tabId, settings }) {
   limiterNode.attack.value = 0.003;
   limiterNode.release.value = 0.25;
 
-  sourceNode.connect(bassNode).connect(clarityNode).connect(gainNode).connect(limiterNode).connect(audioContext.destination);
+  // Explicitly downmix before routing to an earcup, so this works for mono and
+  // stereo sources alike instead of merely selecting the source's left channel.
+  monoMixNode = audioContext.createGain();
+  monoMixNode.channelCount = 1;
+  monoMixNode.channelCountMode = 'explicit';
+  monoMixNode.channelInterpretation = 'speakers';
+  leftGainNode = audioContext.createGain();
+  rightGainNode = audioContext.createGain();
+  outputMergerNode = audioContext.createChannelMerger(2);
+
+  sourceNode.connect(bassNode).connect(clarityNode).connect(gainNode).connect(limiterNode).connect(monoMixNode);
+  monoMixNode.connect(leftGainNode);
+  monoMixNode.connect(rightGainNode);
+  leftGainNode.connect(outputMergerNode, 0, 0);
+  rightGainNode.connect(outputMergerNode, 0, 1);
+  outputMergerNode.connect(audioContext.destination);
   activeTabId = tabId;
   applySettings(settings);
   await audioContext.resume();
