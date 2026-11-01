@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tab Sound Enhancer</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main class="panel">
+      <header>
+        <p class="eyebrow">CURRENT TAB</p>
+        <h1>Sound Enhancer</h1>
+        <p id="tab-name" class="tab-name">Checking tab…</p>
+      </header>
+
+      <p id="status" class="status" role="status">Ready to enhance this tab.</p>
+
+      <section aria-labelledby="preset-heading">
+        <h2 id="preset-heading">Sound profile</h2>
+        <div class="preset-grid" role="group" aria-label="Sound profiles">
+          <button class="preset" type="button" data-preset="balanced">Balanced</button>
+          <button class="preset" type="button" data-preset="bassBoost">Bass Boost</button>
+          <button class="preset" type="button" data-preset="vocalClarity">Vocal Clarity</button>
+        </div>
+      </section>
+
+      <section class="controls" aria-label="Audio controls">
+        <label class="control" for="bass">
+          <span>Bass <output id="bass-value" for="bass">0 dB</output></span>
+          <input id="bass" type="range" min="0" max="12" value="0" step="1">
+        </label>
+        <label class="control" for="clarity">
+          <span>Clarity <output id="clarity-value" for="clarity">0 dB</output></span>
+          <input id="clarity" type="range" min="0" max="12" value="0" step="1">
+        </label>
+        <label class="control" for="volume">
+          <span>Volume <output id="volume-value" for="volume">100%</output></span>
+          <input id="volume" type="range" min="0" max="150" value="100" step="1">
+        </label>
+      </section>
+
+      <div class="actions">
+        <button id="start" class="primary" type="button">Start processing</button>
+        <button id="stop" class="secondary" type="button">Stop</button>
+      </div>
+      <p class="notice">Only one tab can be processed at a time.</p>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

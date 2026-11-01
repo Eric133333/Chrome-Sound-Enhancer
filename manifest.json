@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Sound Enhancer",
+  "version": "1.0.0",
+  "description": "Adjust bass, clarity, and volume for one Chrome tab at a time.",
+  "minimum_chrome_version": "116",
+  "permissions": ["activeTab", "tabCapture", "offscreen", "storage"],
+  "action": {
+    "default_title": "Tab Sound Enhancer",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

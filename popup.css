@@ -1,0 +1,79 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #10111b;
+  color: #f7f7fb;
+}
+
+* { box-sizing: border-box; }
+
+body { margin: 0; min-width: 330px; }
+
+.panel { padding: 18px; }
+
+header { margin-bottom: 12px; }
+
+.eyebrow, h1, h2, p { margin: 0; }
+
+.eyebrow {
+  color: #9ba1ba;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+}
+
+h1 { font-size: 21px; line-height: 1.15; margin-top: 3px; }
+
+h2 { font-size: 12px; color: #c9cce0; margin-bottom: 8px; }
+
+.tab-name {
+  color: #b8bdd1;
+  font-size: 12px;
+  margin-top: 7px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status {
+  background: #1b1e2d;
+  border-radius: 7px;
+  color: #cdd2e7;
+  font-size: 12px;
+  line-height: 1.35;
+  margin: 0 0 16px;
+  min-height: 42px;
+  padding: 11px;
+}
+
+.status.error { background: #3a2027; color: #ffd5d9; }
+.status.active { background: #15352d; color: #cefae3; }
+
+.preset-grid { display: grid; gap: 7px; grid-template-columns: repeat(3, 1fr); }
+
+button {
+  border: 0;
+  border-radius: 7px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 650;
+  min-height: 36px;
+}
+
+button:focus-visible, input:focus-visible { outline: 2px solid #9cb3ff; outline-offset: 2px; }
+button:disabled { cursor: not-allowed; opacity: .45; }
+
+.preset { background: #272b40; color: #d9def2; padding: 6px; }
+.preset.selected { background: #697ee8; color: white; }
+
+.controls { display: grid; gap: 13px; margin: 20px 0; }
+
+.control span { display: flex; font-size: 13px; font-weight: 650; justify-content: space-between; }
+.control output { color: #aebcff; font-variant-numeric: tabular-nums; }
+.control input { accent-color: #7185f3; margin: 8px 0 0; width: 100%; }
+
+.actions { display: grid; gap: 8px; grid-template-columns: 1fr auto; }
+.primary { background: #7185f3; color: white; padding: 0 15px; }
+.secondary { background: #2b2f44; color: #e4e7f4; padding: 0 15px; }
+.notice { color: #8e94ab; font-size: 11px; margin-top: 12px; text-align: center; }
